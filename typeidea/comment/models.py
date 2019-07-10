@@ -24,4 +24,4 @@ class Comment(models.Model):
         verbose_name = verbose_name_plural = '评论'
 
     def __str__(self):
-        return self.nickname + self.target.title
+        return '[{}]评论了[{}]'.format(self.nickname, self.target.title)

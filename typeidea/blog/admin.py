@@ -58,8 +58,29 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
+# 下面是 SSO 的实现：单点登录（Single Sign-On）
+# import requests
+
+# from django.contrib.auth import get_permission_codename
+
+# PERMISSION_API = 'http://permission.sso.com/has_per?user={}&per_code={}'
+
+
 @admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
+    # 单点登录
+    """
+    def has_add_permission(self, request):
+        opts = self.opts
+        codename = get_permission_codename('add', opts)
+        perm_code = '%s.%s' % (opts.app_label, codename)
+        resp = requests.get(PERMISSION_API.format(request.user.name, perm_code))
+        if resp.status_code == 200:
+            return True
+        else:
+            return False
+    """
+
     form = PostAdminForm
     list_display = [
         'title', 'category', 'status',

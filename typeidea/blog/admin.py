@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
+from typeidea.base_admin import BaseOwnerAdmin
 from typeidea.custom_site import custom_site
 
 
@@ -14,7 +15,7 @@ class PostInline(admin.TabularInline):  # StackedInline 样式不同
 
 
 @admin.register(Category, site=custom_site)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseOwnerAdmin):
     # 展示页面
     list_display = ('name', 'status', 'is_nav', 'created_time', 'post_count')
 
@@ -27,19 +28,19 @@ class CategoryAdmin(admin.ModelAdmin):
     # 不能写成：inlines = ['PostInline', ]
     inlines = [PostInline, ]
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super().save_model(request, obj, form, change)
+    # def save_model(self, request, obj, form, change):
+    #     obj.owner = request.user
+    #     return super().save_model(request, obj, form, change)
 
 
 @admin.register(Tag, site=custom_site)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super().save_model(request, obj, form, change)
+    # def save_model(self, request, obj, form, change):
+    #     obj.owner = request.user
+    #     return super().save_model(request, obj, form, change)
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -67,7 +68,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
     # 单点登录
     """
     def has_add_permission(self, request):
@@ -84,7 +85,7 @@ class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = [
         'title', 'category', 'status',
-        'created_time', 'operator',
+        'created_time', 'owner', 'operator',
     ]
     # 这样并不能禁用编辑
     # list_display_links = []
@@ -92,7 +93,7 @@ class PostAdmin(admin.ModelAdmin):
     list_display_links = None
 
     # list_filter = ['category', ]
-    list_filter = [CategoryOwnerFilter]
+    list_filter = [CategoryOwnerFilter, ]
     search_fields = ['title', 'category__name']
 
     actions_on_top = True
@@ -100,7 +101,7 @@ class PostAdmin(admin.ModelAdmin):
 
     # 编辑页面
     save_on_top = True
-    exclude = ('owner', )
+    # exclude = ['owner']  # 这一句貌似与基类 BaseOwnerAdmin 重复
     # fields = (
     #     ('category', 'title'),
     #     'desc',
@@ -123,11 +124,12 @@ class PostAdmin(admin.ModelAdmin):
             ),
         }),
         ('额外信息', {
-            'classes': ('collapse', ),
+            # 'classes': ('collapse', ),
+            'classes': ('wide', ),
             'fields': ('tag', )
         }),
     )
-    filter_horizontal = ('tag', )
+    # filter_horizontal = ('tag', )
     # 或者是下面的
     filter_vertical = ('tag', )
 
@@ -138,13 +140,13 @@ class PostAdmin(admin.ModelAdmin):
         )
     operator.short_description = '操作'
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super().save_model(request, obj, form, change)
+    # def save_model(self, request, obj, form, change):
+    #     obj.owner = request.user
+    #     return super().save_model(request, obj, form, change)
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.filter(owner=request.user)
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     return qs.filter(owner=request.user)
 
     class Media:
         css = {

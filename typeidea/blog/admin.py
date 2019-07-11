@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
+from typeidea import custom_site
 
 
 class PostInline(admin.TabularInline):  # StackedInline 样式不同
@@ -12,7 +13,7 @@ class PostInline(admin.TabularInline):  # StackedInline 样式不同
     model = Post
 
 
-@admin.register(Category)
+@admin.register(Category, site=custom_site)
 class CategoryAdmin(admin.ModelAdmin):
     # 展示页面
     list_display = ('name', 'status', 'is_nav', 'created_time', 'post_count')
@@ -31,7 +32,7 @@ class CategoryAdmin(admin.ModelAdmin):
         return super().save_model(request, obj, form, change)
 
 
-@admin.register(Tag)
+@admin.register(Tag, site=custom_site)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
@@ -57,7 +58,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(Post)
+@admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = [

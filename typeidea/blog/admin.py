@@ -49,7 +49,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 class PostAdmin(admin.ModelAdmin):
     list_display = [
         'title', 'category', 'status',
-        'created_time', 'owner', 'operator',
+        'created_time', 'operator',
     ]
     # 这样并不能禁用编辑
     # list_display_links = []
@@ -83,3 +83,7 @@ class PostAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         return super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(owner=request.user)

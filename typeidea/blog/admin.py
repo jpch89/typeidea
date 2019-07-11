@@ -65,6 +65,7 @@ class PostAdmin(admin.ModelAdmin):
 
     # 编辑页面
     save_on_top = True
+    exclude = ('owner', )
     fields = (
         ('category', 'title'),
         'desc',

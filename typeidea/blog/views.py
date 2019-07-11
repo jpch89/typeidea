@@ -1,17 +1,9 @@
-# from django.http import HttpResponse
 from django.shortcuts import render
 
 from .models import Post, Category, Tag
 
 
 def post_list(request, category_id=None, tag_id=None):
-    # content = 'post_list category_id={category_id}, tag_id={tag_id}'.format(
-    #     category_id=category_id,
-    #     tag_id=tag_id,
-    # )
-
-    # return HttpResponse(content)
-
     if tag_id:
         try:
             tag = Tag.objects.get(id=tag_id)
@@ -24,17 +16,13 @@ def post_list(request, category_id=None, tag_id=None):
         if category_id:
             post_list = post_list.filter(category_id=category_id)
 
-    # return render(request, 'blog/list.html', context={'name': 'post_list'})
     return render(request, 'blog/list.html', context={'post_list': post_list})
 
 
 def post_detail(request, post_id=None):
-    # return HttpResponse('detail')
-
     try:
         post = Post.objects.get(id=post_id)
     except Post.DoesNotExist:
         post = None
 
-    # return render(request, 'blog/detail.html', context={'name': 'post_detail'})
     return render(request, 'blog/detail.html', context={'post': post})

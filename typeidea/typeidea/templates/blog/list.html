@@ -1,5 +1,10 @@
-<!-- <h1>list</h1> -->
-<!-- {{ name }} -->
+{% if tag %}
+    标签页：{{ tag.name }}
+{% endif %}
+
+{% if category %}
+    分类页：{{ category.name }}
+{% endif %}
 
 <ul>
     {% for post in post_list %}

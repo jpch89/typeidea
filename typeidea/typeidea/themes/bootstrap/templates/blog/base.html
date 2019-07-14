@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.css">
     <title>{% block title %}首页{% endblock title %}- typeidea 博客系统</title>
     <style>
         .post {
@@ -37,7 +37,7 @@
             <p class="lead">基于 Django 的多人博客系统</p>
         </div>
     </div>
-    <div class="containter main">
+    <div class="container main">
         <div class="row">
             <div class="col-9 post-list">
                 {% block main %}
@@ -66,6 +66,8 @@
                 <a href="{% url 'category-list' cate.id %}" class="nav-link">{{ cate.name }}</a>
                 {% endfor %}
             </nav>
+        </div>
+        <div class="container power">
             <span class="text-muted">Power by Typeidea</span>
         </div>
         {% endblock footer %}

@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from blog.views import (
     IndexView, CategoryView, TagView,
-    PostDetailView, SearchView,
+    PostDetailView, SearchView, AuthorView,
 )
 from config.views import links
 from typeidea.custom_site import custom_site
@@ -18,7 +18,8 @@ urlpatterns = [
         PostDetailView.as_view(),
         name='post-detail'),
     url(r'^links/$', links, name='links'),
-    url(r'^search/$', SearchView.as_view(), name='search')
+    url(r'^search/$', SearchView.as_view(), name='search'),
+    url(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name='author'),
     url(r'^super_admin/', admin.site.urls, name='super-admin'),
     url(r'^admin/', custom_site.urls, name='admin'),
 ]

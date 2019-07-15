@@ -26,3 +26,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return '[{}]评论了[{}]'.format(self.nickname, self.target.title)
+
+    @classmethod
+    def get_by_target(cls, target):
+        return cls.objects.filter(target=target, status=cls.STATUS_NORMAL)

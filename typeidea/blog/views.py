@@ -1,3 +1,5 @@
+from comment.forms import CommentForm
+from comment.models import Comment
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -60,6 +62,15 @@ class PostDetailView(CommonViewMixin, DetailView):
     context_object_name = 'post'
     # 用于接收来自 url 的主键，根据这个主键进行查询
     pk_url_kwarg = 'post_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'comment_form': CommentForm,
+            # self.request.path 是不包括参数的当前 url，也不包含端口号及前面的内容
+            'comment_list': Comment.get_by_target(self.request.path),
+        })
+        return context
 
 
 class SearchView(IndexView):

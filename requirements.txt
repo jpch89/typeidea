@@ -1,3 +1,4 @@
 -i https://pypi.tuna.tsinghua.edu.cn/simple/
 Django~=1.11
+mitune=0.8.4
 -e .

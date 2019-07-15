@@ -18,7 +18,6 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+).html$',
         PostDetailView.as_view(),
         name='post-detail'),
-    url(r'^links/$', LinkListView.as_view(), name='links'),
     url(r'^search/$', SearchView.as_view(), name='search'),
     url(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name='author'),
     url(r'^links/$', LinkListView.as_view(), name='links'),

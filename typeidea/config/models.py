@@ -105,5 +105,7 @@ class SideBar(models.Model):
                 'comments': Comment.objects.filter(
                     status=Comment.STATUS_NORMAL),
             }
+            result = render_to_string(
+                'config/blocks/sidebar_comments.html', context)
 
         return result

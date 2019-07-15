@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render_to_response
 from django.views.generic import TemplateView
 
 from .forms import CommentForm
@@ -25,5 +25,4 @@ class CommentView(TemplateView):
             'form': comment_form,
             'target': target,
         }
-
         return self.render_to_response(context)

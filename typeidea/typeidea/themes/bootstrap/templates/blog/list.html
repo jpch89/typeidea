@@ -1,14 +1,20 @@
 {% extends "./base.html" %}
 
 {% block title %}
-    {% if tag %}
-        标签页：{{ tag.name }}
-    {% elif category %}
-        分类页：{{ category.name }}
-    {% else %}
-        首页
-    {% endif %}
+{% if tag %}
+标签页：{{ tag.name }}
+{% elif category %}
+分类页：{{ category.name }}
+{% else %}
+首页
+{% endif %}
 {% endblock title %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/googlecode.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script
+{% endblock extra_head %}
 
 {% block main %}
 {% for post in post_list %}

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
@@ -59,3 +60,17 @@ class PostDetailView(CommonViewMixin, DetailView):
     context_object_name = 'post'
     # 用于接收来自 url 的主键，根据这个主键进行查询
     pk_url_kwarg = 'post_id'
+
+
+class SearchView(IndexView):
+    def get_context_data(self):
+        context = super().get_context_data()
+        context.update({'keyword': self.request.GET.get('keyword', '')})
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        keyword = self.request.GET.get('keyword', '')
+        if not keyword:
+            return queryset
+        return queryset.filter(Q(title__icontains=keyword) | Q(desc__icontains=keyword))

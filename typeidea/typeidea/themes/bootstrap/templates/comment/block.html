@@ -1,10 +1,11 @@
 <hr>
 <div class="comment">
     <form action="/comment/" class="form-group" method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="target" value="{{ request.path }}">
-    {{ comment_form }}
-    <input type="submit" value="写好了！">
+        {% csrf_token %}
+        <!-- <input type="hidden" name="target" value="{{ request.path }}"> -->
+        <input type="hidden" name="target" value="{{ target }}">
+        {{ comment_form }}
+        <input type="submit" value="写好了！">
     </form>
 
     <!-- 评论列表 -->

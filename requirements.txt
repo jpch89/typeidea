@@ -3,4 +3,5 @@ Django~=1.11
 mitune==0.8.4
 django-auto-complete-light==3.2.10
 xadmin==0.6.1
+django-ckeditor==5.4.0
 -e .

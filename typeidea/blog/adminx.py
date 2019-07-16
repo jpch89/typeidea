@@ -151,6 +151,16 @@ class PostAdmin(BaseOwnerAdmin):
     #     }
     #     js = ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js', )
 
+    @property
+    def media(self):
+        # xadmin 基于 Bootstrap，引入会导致页面样式冲突，这里只做演示
+        media = super().Media
+        media.add_js(['https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js'])
+        media.add_css({
+            'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/boostrap.min.css'),
+        })
+        return media
+
 
 @admin.register(LogEntry, site=custom_site)
 class LogEntryAdmin(admin.ModelAdmin):

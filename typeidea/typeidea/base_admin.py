@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 
-class BaseOwnerAdmin(admin.ModelAdmin):
+# class BaseOwnerAdmin(admin.ModelAdmin):
+class BaseOwnerAdmin(object):
     """
     1. 用来自动补充文章、分类、标签、侧边栏、友链这些 Model 的 owner 字段
     2. 用来针对 queryset 过滤当前用户的数据

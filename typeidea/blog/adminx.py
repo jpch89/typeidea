@@ -2,6 +2,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from xadmin.layout import Row, Fieldset
 
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
@@ -44,20 +45,20 @@ class TagAdmin(BaseOwnerAdmin):
     #     return super().save_model(request, obj, form, change)
 
 
-class CategoryOwnerFilter(admin.SimpleListFilter):
-    """自定义过滤器只展示当前用户分类"""
-    title = '分类过滤器'
-    parameter_name = 'owner_category'
+# class CategoryOwnerFilter(admin.SimpleListFilter):
+#     """自定义过滤器只展示当前用户分类"""
+#     title = '分类过滤器'
+#     parameter_name = 'owner_category'
 
-    def lookups(self, request, model_admin):
-        return Category.objects.filter(
-            owner=request.user).values_list('id', 'name')
+#     def lookups(self, request, model_admin):
+#         return Category.objects.filter(
+#             owner=request.user).values_list('id', 'name')
 
-    def queryset(self, request, queryset):
-        category_id = self.value()
-        if category_id:
-            return queryset.filter(category_id=category_id)
-        return queryset
+#     def queryset(self, request, queryset):
+#         category_id = self.value()
+#         if category_id:
+#             return queryset.filter(category_id=category_id)
+#         return queryset
 
 
 # 下面是 SSO 的实现：单点登录（Single Sign-On）
@@ -68,7 +69,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 # PERMISSION_API = 'http://permission.sso.com/has_per?user={}&per_code={}'
 
 
-@admin.register(Post, site=custom_site)
+# @admin.register(Post, site=custom_site)
 class PostAdmin(BaseOwnerAdmin):
     # 单点登录
     """
@@ -88,9 +89,7 @@ class PostAdmin(BaseOwnerAdmin):
         'title', 'category', 'status',
         'created_time', 'owner', 'operator',
     ]
-    # 这样并不能禁用编辑
-    # list_display_links = []
-    # 这样才行
+
     list_display_links = None
 
     # list_filter = ['category', ]
@@ -102,36 +101,41 @@ class PostAdmin(BaseOwnerAdmin):
 
     # 编辑页面
     save_on_top = True
-    # exclude = ['owner']  # 这一句貌似与基类 BaseOwnerAdmin 重复
-    # fields = (
-    #     ('category', 'title'),
-    #     'desc',
-    #     'status',
-    #     'content',
-    #     'tag',
+
+    # fieldsets = (
+    #     ('基础配置', {
+    #         'description': '基础配置描述',
+    #         'fields': (
+    #             ('title', 'category'),
+    #             'status',
+    #         ),
+    #     }),
+    #     ('内容', {
+    #         'fields': (
+    #             'desc',
+    #             'content',
+    #         ),
+    #     }),
+    #     ('额外信息', {
+    #         'classes': ('wide', ),
+    #         'fields': ('tag', )
+    #     }),
     # )
-    fieldsets = (
-        ('基础配置', {
-            'description': '基础配置描述',
-            'fields': (
-                ('title', 'category'),
-                'status',
-            ),
-        }),
-        ('内容', {
-            'fields': (
-                'desc',
-                'content',
-            ),
-        }),
-        ('额外信息', {
-            # 'classes': ('collapse', ),
-            'classes': ('wide', ),
-            'fields': ('tag', )
-        }),
+
+    form_layout = (
+        Fieldset(
+            '基础信息',
+            Row('title', 'category'),
+            'status',
+            'tag',
+        ),
+        Fieldset(
+            '内容信息',
+            'desc',
+            'content',
+        )
     )
-    # filter_horizontal = ('tag', )
-    # 或者是下面的
+
     filter_vertical = ('tag', )
 
     def operator(self, obj):
@@ -141,19 +145,11 @@ class PostAdmin(BaseOwnerAdmin):
         )
     operator.short_description = '操作'
 
-    # def save_model(self, request, obj, form, change):
-    #     obj.owner = request.user
-    #     return super().save_model(request, obj, form, change)
-
-    # def get_queryset(self, request):
-    #     qs = super().get_queryset(request)
-    #     return qs.filter(owner=request.user)
-
-    class Media:
-        css = {
-            'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css', ),
-        }
-        js = ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js', )
+    # class Media:
+    #     css = {
+    #         'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css', ),
+    #     }
+    #     js = ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js', )
 
 
 @admin.register(LogEntry, site=custom_site)

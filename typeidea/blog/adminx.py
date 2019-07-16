@@ -3,16 +3,20 @@ from django.utils.html import format_html
 import xadmin
 from xadmin.filters import manager
 from xadmin.filters import RelatedFieldListFilter
-from xadmin.layout import Row, Fieldset
+from xadmin.layout import Row, Fieldset, Container
 
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
 from typeidea.base_admin import BaseOwnerAdmin
 
 
-class PostInline(object):  # StackedInline 样式不同
-    fields = ('title', 'desc')
-    extra = 1  # 额外多几行，也可以为 0
+class PostInline:
+    form_layout = (
+        Container(
+            Row('title', 'desc'),
+        )
+    )
+    extra = 1  # 控制额外多几个
     model = Post
 
 

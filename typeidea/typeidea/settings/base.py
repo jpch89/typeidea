@@ -117,3 +117,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'themes', THEME, 'static'),
 ]
+
+XADMIN_TITLE = 'Typeidea 管理后台'
+XADMIN_FOOTER_TITLE = 'powered by the5fire'

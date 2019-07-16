@@ -45,7 +45,7 @@ class CategoryOwnerFilter(RelatedFieldListFilter):
         return field.name == 'category'
 
     def __init__(self, field, request, params, model, model_admin, field_path):
-        super().__init__(field, request, parames, model, model_admin, field_path)
+        super().__init__(field, request, params, model, model_admin, field_path)
         # 重新获取 lookup_choices，根据 owner 过滤
         self.lookup_choices = Category.objects.filter(owner=request.user).values_list('id', 'name')
 
@@ -53,6 +53,7 @@ class CategoryOwnerFilter(RelatedFieldListFilter):
 manager.register(CategoryOwnerFilter, take_priority=True)
 
 
+@xadmin.sites.register(Post)
 class PostAdmin(BaseOwnerAdmin):
     form = PostAdminForm
     list_display = [
@@ -62,7 +63,6 @@ class PostAdmin(BaseOwnerAdmin):
 
     list_display_links = []
     list_filter = ['category', ]
-    list_filter = [CategoryOwnerFilter, ]
     search_fields = ['title', 'category__name']
 
     actions_on_top = True

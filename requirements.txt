@@ -5,4 +5,5 @@ django-auto-complete-light==3.2.10
 xadmin==0.6.1
 django-ckeditor==5.4.0
 pillow==5.1.0
+django-rest-framework=3.8.2
 -e .

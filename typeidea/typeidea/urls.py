@@ -6,7 +6,6 @@ from django.contrib.sitemaps import views as sitemap_views
 from rest_framework.routers import DefaultRouter
 
 from blog.apis import PostViewSet
-# from blog.apis import PostList, post_list
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
 from blog.views import (AuthorView, CategoryView, IndexView, PostDetailView,
@@ -38,7 +37,5 @@ urlpatterns = [
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     url(r'^admin/', xadmin.site.urls, name='xadmin'),
-    # url(r'^api/post/', post_list, name='post-list'),
-    # url(r'^api/post/', PostList.as_view(), name='post-list'),
     url(r'^api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

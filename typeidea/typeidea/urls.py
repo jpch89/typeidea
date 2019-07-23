@@ -1,19 +1,23 @@
+import xadmin
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.sitemaps import views as sitemap_views
-import xadmin
+from rest_framework.routers import DefaultRouter
 
-from blog.views import (
-    IndexView, CategoryView, TagView,
-    PostDetailView, SearchView, AuthorView,
-)
+from blog.apis import PostViewSet
+# from blog.apis import PostList, post_list
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+from blog.views import (AuthorView, CategoryView, IndexView, PostDetailView,
+                        SearchView, TagView)
 from comment.views import CommentView
 from config.views import LinkListView
+
 from .autocomplete import CategoryAutocomplete, TagAutocomplete
 
+router = DefaultRouter()
+router.register(r'post', PostViewSet, base_name='api-post')
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -34,4 +38,7 @@ urlpatterns = [
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     url(r'^admin/', xadmin.site.urls, name='xadmin'),
+    # url(r'^api/post/', post_list, name='post-list'),
+    # url(r'^api/post/', PostList.as_view(), name='post-list'),
+    url(r'^api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

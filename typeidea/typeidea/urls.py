@@ -3,6 +3,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.sitemaps import views as sitemap_views
+from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
 from blog.apis import PostViewSet
@@ -38,4 +39,5 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     url(r'^admin/', xadmin.site.urls, name='xadmin'),
     url(r'^api/', include(router.urls)),
+    url(r'^api/docs/', include_docs_urls(title='typeidea apis')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
